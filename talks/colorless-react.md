@@ -1,6 +1,8 @@
 ---
 theme: default
 title: Colorless React
+description: How promise hacking made React a colorless framework
+date: 2026-09-03
 layout: cover
 ---
 

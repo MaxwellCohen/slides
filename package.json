@@ -1,10 +1,12 @@
 {
-  "name": "async-frameworks",
+  "name": "slides",
   "type": "module",
   "private": true,
+  "packageManager": "pnpm@10.15.1",
   "scripts": {
-    "build": "slidev build",
-    "dev": "slidev --open",
+    "dev": "node scripts/dev.mjs",
+    "build": "node scripts/build.mjs",
+    "new": "node scripts/new.mjs",
     "export": "slidev export"
   },
   "dependencies": {
