@@ -17,7 +17,9 @@ Without major breaking changes
 layout: two-cols-header
 ---
 
-## what function color?
+## function color
+
+<p class="text-sm opacity-60 mt-1">Bob Nystrom, “What Color is Your Function?” (2015)</p>
 
 ::left::
 
@@ -55,7 +57,7 @@ React components are blue: they return JSX, not a Promise.
 
 ---
 
-## red infects the call stack
+## red functions infects the call stack
 
 You cannot `await` in a blue function.
 
@@ -70,7 +72,7 @@ function UserProfile({ userId }: { userId: number }) {
 
 <v-clicks>
 
-- React components are **blue** — they return JSX, not a Promise
+- React client components are **blue** — they return JSX, not a Promise
 - Need data? Go red (`async` component) or fake it (`useEffect`, `isPending`)
 - That's the color problem: two versions of every function, forever
 
@@ -104,7 +106,7 @@ layout: default
 class: text-sm
 ---
 
-## the tax for staying blue
+## the cost for staying blue
 
 <p class="text-sm opacity-70 mb-4">Click through — the color drains out of the component →</p>
 
@@ -281,7 +283,7 @@ You cannot synchronously ask a Promise for its value.
 layout: section
 ---
 
-# hack 2: cache the promise
+# hack 2: cache the promise or sable promises only
 
 So a blue function can read it.
 
@@ -403,6 +405,43 @@ Sebastian Markbåge: https://bsky.app/profile/sebmarkbage.calyptus.eu/post/3lku7
 
 ---
 layout: two-cols-header
+class: text-sm
+---
+
+## don't skip `use()`
+
+New in React 19.3
+
+::left::
+
+Stamp `status` so React can read it sync.
+Don't then skip `use` by reading it yourself.
+
+```ts
+// 🔴 bypasses use() once cached
+if (promise.status === "fulfilled") {
+  return promise.value;
+}
+const user = use(promise);
+```
+
+- If `use()` suspended last render, it has to run again
+- Treat `use(promise)` like `await` — always call it
+
+::right::
+
+<img src="./images/conditional-use-of-use.png" class="rounded-lg ring-1 ring-white/10 max-h-85 object-contain" />
+
+<!--
+The status fields exist for React, not for you.
+Libraries used to do: if cached, return the value; else use(promise).
+If you suspend with use() and skip it on the next render, React warns:
+"This library called use() to suspend in a previous render but did not call use() when it finished."
+https://react.dev/warnings/conditional-use-of-use
+-->
+
+---
+layout: two-cols-header
 ---
 
 ## one function, no color
@@ -456,5 +495,7 @@ layout: end
  [What Color is Your Function? — Bob Nystrom](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/)
 
  [`use` — React docs (caching + status fields)](https://react.dev/reference/react/use)
+
+ [Conditional `use()` warning](https://react.dev/warnings/conditional-use-of-use)
  
  [Sebastian Markbåge on sync-readable promises](https://bsky.app/profile/sebmarkbage.calyptus.eu/post/3lku7b7xjmk2w)
