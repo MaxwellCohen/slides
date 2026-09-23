@@ -73,7 +73,7 @@ function UserProfile({ userId }: { userId: number }) {
 <v-clicks>
 
 - React client components are **blue** — they return JSX, not a Promise
-- Need data? Go red (`async` component) or fake it (`useEffect`, `isPending`)
+- Need data? Go red (`async` component) or move to an effect (`useEffect`, `isPending`)
 - That's the color problem: two versions of every function, forever
 
 </v-clicks>
