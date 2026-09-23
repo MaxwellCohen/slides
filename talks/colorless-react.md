@@ -283,7 +283,7 @@ You cannot synchronously ask a Promise for its value.
 layout: section
 ---
 
-# hack 2: cache the promise or sable promises only
+# hack 2: cache the promise or stable promises only
 
 So a blue function can read it.
 
