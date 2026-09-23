@@ -23,7 +23,7 @@ layout: two-cols-header
 
 ::left::
 
-### <span class="text-sky-400">blue</span> — sync
+### <span class="text-sky-400">blue</span> (sync)
 ```ts
 function getName(user: User) {
   return user.name;
@@ -36,7 +36,7 @@ function getName(user: User) {
 
 ::right::
 
-### <span class="text-rose-400">red</span> — async
+### <span class="text-rose-400">red</span> (async)
 ```ts
 async function getName(id: string) {
   const user = await fetchUser(id);
@@ -45,21 +45,21 @@ async function getName(id: string) {
 ```
 
 - Returns a `Promise`
-- Callers must be red too
+- Callers must be red (async) too
 - Infects the whole stack
 
 <!--
 Bob Nystrom, "What Color is Your Function?" (2015).
 Async is not just a keyword — it splits the language in two.
 You cannot call red from blue. Once one helper awaits, every function above it has to await.
-React components are blue: they return JSX, not a Promise.
+React components are blue (sync): they return JSX, not a Promise.
 -->
 
 ---
 
-## red functions infects the call stack
+## red (async) functions infect the call stack
 
-You cannot `await` in a blue function.
+You cannot `await` in a blue (sync) function.
 
 ```ts {3}
 function UserProfile({ userId }: { userId: number }) {
@@ -72,8 +72,8 @@ function UserProfile({ userId }: { userId: number }) {
 
 <v-clicks>
 
-- React client components are **blue** — they return JSX, not a Promise
-- Need data? Go red (`async` component) or move to an effect (`useEffect`, `isPending`)
+- React client components are **blue (sync)** — they return JSX, not a Promise
+- Need data? Go **red (async)** or move to an effect (`useEffect`, `isPending`)
 - That's the color problem: two versions of every function, forever
 
 </v-clicks>
@@ -82,7 +82,7 @@ function UserProfile({ userId }: { userId: number }) {
 layout: two-cols-header
 ---
 
-## two ways to stay blue
+## two ways to stay blue (sync)
 
 Both keep the component sync. They disagree about **who waits**.
 
@@ -106,7 +106,7 @@ layout: default
 class: text-sm
 ---
 
-## the cost for staying blue
+## the cost for staying blue (sync)
 
 <p class="text-sm opacity-70 mb-4">Click through — the color drains out of the component →</p>
 
@@ -197,12 +197,12 @@ export default function App({ userId }: { userId: number }) {
 layout: two-cols-header
 ---
 
-## the component never went red
+## the component never went red (async)
 
 ::left::
 
 ### `use(promise)`
-- Reads a promise inside a **blue** function
+- Reads a promise inside a **blue (sync)** function
 - If pending, the component **pauses**
 - When it resolves, React re-renders with the value
 - If it rejects, the error bubbles up
@@ -285,7 +285,7 @@ layout: section
 
 # hack 2: cache the promise or stable promises only
 
-So a blue function can read it.
+So a blue (sync) function can read it.
 
 ---
 layout: default
@@ -477,7 +477,7 @@ layout: center
 
 You write as if the data is already there.
 
-The cache makes the promise readable from **blue** code.
+The cache makes the promise readable from **blue (sync)** code.
 Suspense is what happens when it isn't ready yet.
 
 - No `isPending`. 
